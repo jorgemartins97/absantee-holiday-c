@@ -11,6 +11,13 @@ using Gateway;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var config = builder.Configuration;
+var holidayQueueName = config["HolidayQueues:" + args[0]];
+var colaboratorQueueName = config["ColaboratorQueues:" + args[0]];
+var holidayPeriodQueueName = config["HolidayPeriodQueues:" + args[0]];
+var connection = config["ConnectionStrings:" + args[0]];
+
+var port = getPort(holidayQueueName);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -18,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AbsanteeContext>(opt =>
     //opt.UseInMemoryDatabase("AbsanteeList")
     //opt.UseSqlite("Data Source=AbsanteeDatabase.sqlite")
-    opt.UseSqlite(Host.CreateApplicationBuilder().Configuration.GetConnectionString("AbsanteeDatabase"))
+    opt.UseSqlite(Host.CreateApplicationBuilder().Configuration.GetConnectionString(args[0]))
     );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -58,13 +65,29 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+
 
 var rabbitMQConsumerService = app.Services.GetRequiredService<IRabbitMQConsumerController>();
 var rabbitMQColabConsumerService = app.Services.GetRequiredService<IRabbitMQColabConsumerController>();
 var rabbitMQHolidayWithPeriodConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayWithPeriodConsumerController>();
+
+rabbitMQColabConsumerService.ConfigQueue(colaboratorQueueName);
+rabbitMQConsumerService.ConfigQueue(holidayQueueName);
+rabbitMQHolidayWithPeriodConsumerService.ConfigQueue(holidayPeriodQueueName);
+
 rabbitMQConsumerService.StartConsuming();
 rabbitMQColabConsumerService.StartConsuming();
 rabbitMQHolidayWithPeriodConsumerService.StartConsuming();
 
-app.Run();
+app.MapControllers();
+
+app.Run($"https://localhost:{port}");
+
+int getPort(string name)
+{
+    // Implement logic to map queue name to a unique port number
+    // Example: Assign a unique port number based on the queue name suffix
+    int basePort = 5010; // Start from port 5000
+    int queueIndex = int.Parse(name.Substring(21)); // Extract the numeric part of the queue name (assuming it starts with 'Q')
+    return basePort + queueIndex;
+}

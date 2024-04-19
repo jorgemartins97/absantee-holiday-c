@@ -18,7 +18,7 @@ public class HolidayAmpqGateway
     {
         var body = Encoding.UTF8.GetBytes(holiday);
         _channel.BasicPublish(exchange: "holiday_logs",
-                              routingKey: "holidayKey",
+                              routingKey: string.Empty,
                               basicProperties: null,
                               body: body);
     }
@@ -27,7 +27,7 @@ public class HolidayAmpqGateway
     {
         var body = Encoding.UTF8.GetBytes(holiday);
         _channel.BasicPublish(exchange: "holiday_WithHolidayPeriod_logs",
-                              routingKey: "holiday_WithHolidayPeriod_Key",
+                              routingKey: string.Empty,
                               basicProperties: null,
                               body: body);
     }

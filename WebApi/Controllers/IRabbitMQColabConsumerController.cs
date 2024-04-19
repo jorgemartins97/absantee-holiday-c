@@ -5,4 +5,6 @@ using System.Threading.Tasks;
 public interface IRabbitMQColabConsumerController
 {
     void StartConsuming();
+
+    void ConfigQueue(string queueName);
 }
