@@ -36,8 +36,11 @@ builder.Services.AddTransient<IHolidayPeriodFactory, HolidayPeriodFactory>();
 builder.Services.AddTransient<HolidayPeriodMapper>();
 builder.Services.AddTransient<HolidayPeriodService>();
 
+builder.Services.AddSingleton<IRabbitMQHolidayWithPeriodConsumerController, RabbitMQHolidayWithPeriodConsumerController>();
 builder.Services.AddSingleton<IRabbitMQConsumerController, RabbitMQConsumerController>();
+
 builder.Services.AddTransient<IColaboratorsIdRepository, ColaboratorsIdRepository>();
+builder.Services.AddTransient<IColaboratorIdFactory, ColaboratorIdFactory>();
 builder.Services.AddTransient<ColaboratorsIdMapper>();
 builder.Services.AddTransient<ColaboratorIdService>();
 builder.Services.AddTransient<IRabbitMQColabConsumerController, RabbitMQColabConsumerController>();
@@ -59,7 +62,9 @@ app.MapControllers();
 
 var rabbitMQConsumerService = app.Services.GetRequiredService<IRabbitMQConsumerController>();
 var rabbitMQColabConsumerService = app.Services.GetRequiredService<IRabbitMQColabConsumerController>();
+var rabbitMQHolidayWithPeriodConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayWithPeriodConsumerController>();
 rabbitMQConsumerService.StartConsuming();
 rabbitMQColabConsumerService.StartConsuming();
+rabbitMQHolidayWithPeriodConsumerService.StartConsuming();
 
 app.Run();

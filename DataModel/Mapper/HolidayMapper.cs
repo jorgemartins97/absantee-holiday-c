@@ -10,22 +10,26 @@ public class HolidayMapper
 {
     private IHolidayFactory _holidayFactory;
     private HolidayPeriodMapper _holidayPeriodMapper;
+    private ColaboratorsIdMapper _colaboratorIdMapper;
 
     public HolidayMapper(
         IHolidayFactory holidayFactory,
-        HolidayPeriodMapper holidayPeriodMapper)
+        HolidayPeriodMapper holidayPeriodMapper, ColaboratorsIdMapper colaboratorIdMapper)
     {
         _holidayFactory = holidayFactory;
         _holidayPeriodMapper = holidayPeriodMapper;
+        _colaboratorIdMapper = colaboratorIdMapper;
     }
 
 
     public Holiday ToDomain(HolidayDataModel holidayDM)
     {
         long id = holidayDM.Id;
-        long colabId = holidayDM.colaboratorId;
+        ColaboratorsIdDataModel colabId = holidayDM.colaboratorId;
 
-        Holiday holidayDomain = _holidayFactory.NewHoliday(id,colabId);
+        long cId = colabId.Id;
+
+        Holiday holidayDomain = _holidayFactory.NewHoliday(id,cId);
         if(holidayDM.holidayPeriods!=null){
             foreach (var holidayPeriods in holidayDM.holidayPeriods)
             {
@@ -48,17 +52,17 @@ public class HolidayMapper
             holidaysDomain.Add(holidayDomain);
         }
 
-        return holidaysDomain;
+        return holidaysDomain.AsEnumerable();
     }
 
     
 
-    public HolidayDataModel ToDataModel(Holiday holiday)
+    public HolidayDataModel ToDataModel(Holiday holiday, ColaboratorsIdDataModel colaboratorsIdDataModel)
     {
         var holidayDataModel = new HolidayDataModel
         {
             Id = holiday.Id,
-            colaboratorId = holiday.GetColaborator(),
+            colaboratorId = colaboratorsIdDataModel,
             holidayPeriods = holiday.GetHolidayPeriods().Select(hp => _holidayPeriodMapper.ToDataModel(hp)).ToList()
         };
 
@@ -79,5 +83,31 @@ public class HolidayMapper
         holidayDataModel.holidayPeriods = lista;
 
         return true;
+    }
+
+    public void UpdateHolidayPeriods(HolidayDataModel holidayDataModel, IEnumerable<HolidayPeriod> updatedPeriods)
+    {
+        // Converte os períodos existentes para um dicionário para acesso mais fácil
+        var existingPeriodsDict = holidayDataModel.holidayPeriods
+            .ToDictionary(hp => (hp.StartDate, hp.EndDate), hp => hp);
+
+        foreach (var period in updatedPeriods)
+        {
+            // Cria uma chave para o período atual
+            var periodKey = (period.StartDate, period.EndDate);
+
+            // Se o período já existe, atualize-o; caso contrário, adicione como um novo
+            if (existingPeriodsDict.ContainsKey(periodKey))
+            {
+                var existingPeriodDataModel = existingPeriodsDict[periodKey];
+                // Atualize as propriedades de existingPeriodDataModel conforme necessário
+                // Por exemplo: existingPeriodDataModel.SomeProperty = period.SomeProperty;
+            }
+            else
+            {
+                var periodDataModel = _holidayPeriodMapper.ToDataModel(period);
+                holidayDataModel.holidayPeriods.Add(periodDataModel);
+            }
+        }
     }
 }

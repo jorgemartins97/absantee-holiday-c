@@ -14,22 +14,21 @@ public class HolidayService {
 
     private readonly AbsanteeContext _context;
     private readonly IHolidayRepository _holidayRepository;
-
+    private readonly IHolidayPeriodRepository _holidayPeriodRepository;
     private readonly IColaboratorsIdRepository _colaboratorsIdRepository;
     private readonly IHolidayPeriodFactory _holidayPeriodFactory;
     private readonly HolidayAmpqGateway _holidayAmqpGateway;
 
 
     
-    public HolidayService(IHolidayRepository holidayRepository, IHolidayPeriodFactory holidayPeriodFactory, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
+    public HolidayService(IHolidayRepository holidayRepository, IHolidayPeriodFactory holidayPeriodFactory, IHolidayPeriodRepository holidayPeriodRepository, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
         _holidayRepository = holidayRepository;
         _holidayPeriodFactory = holidayPeriodFactory;
+        _holidayPeriodRepository = holidayPeriodRepository;
         _holidayAmqpGateway=holidayAmqpGateway;
         _colaboratorsIdRepository = colaboratorsIdRepository;
 
-    }
-
-    
+    }    
 
     public async Task<HolidayDTO> Add(HolidayDTO holidayDto, List<string> errorMessages)
     {
@@ -50,8 +49,8 @@ public class HolidayService {
 
         HolidayDTO holidayDTO = HolidayDTO.ToDTO(holiday);
 
-        string holidayAmqpDTO = HolidayGatewayDTO.Serialize(holidayDTO);	
-        _holidayAmqpGateway.Publish(holidayAmqpDTO);
+        // string holidayAmqpDTO = HolidayGatewayDTO.Serialize(holidayDTO);	
+        // _holidayAmqpGateway.Publish(holidayAmqpDTO);
 
         return holidayDTO;
     }

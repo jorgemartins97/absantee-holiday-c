@@ -10,9 +10,6 @@ public class Holiday : IHoliday
 
 	private List<HolidayPeriod> _holidayPeriods = new List<HolidayPeriod>();
 
-	// {
-	// 	get { return _colaborator; }
-	// }
 	public List<HolidayPeriod> HolidayPeriod
 	{
 		get { return _holidayPeriods; }
