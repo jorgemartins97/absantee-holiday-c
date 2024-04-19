@@ -49,7 +49,7 @@ namespace WebApi.Controllers
                 var colabResult = JsonConvert.DeserializeObject<ColaboratorIdDTO>(message);
                 var colaboratorIDDTO = new ColaboratorIdDTO
                 {
-                    _colabId =colabResult._colabId,
+                    Id =colabResult.Id,
                 };
            
  

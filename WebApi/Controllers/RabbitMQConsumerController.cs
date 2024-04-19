@@ -72,7 +72,7 @@ namespace WebApi.Controllers
                                             autoDelete: false,
                                             arguments: null);
 
-            _channel.QueueBind(queue: _queueName,
+            _channel.QueueBind(queue: _queueName, 
                   exchange: "holiday_logs",
                   routingKey: string.Empty);
         }
