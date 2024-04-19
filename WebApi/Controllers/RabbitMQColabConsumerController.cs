@@ -57,7 +57,7 @@ namespace WebApi.Controllers
                 using (var scope = _scopeFactory.CreateScope()){
                 var colaboratorIdService = scope.ServiceProvider.GetRequiredService<ColaboratorIdService>();
                 await colaboratorIdService.Add(colaboratorIDDTO, _errorMessages);
-                Console.WriteLine("nelson copiou tudo");
+                Console.WriteLine("colaborator created");
                 };
             };
             
