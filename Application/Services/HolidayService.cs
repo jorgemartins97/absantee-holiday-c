@@ -14,17 +14,15 @@ public class HolidayService {
 
     private readonly AbsanteeContext _context;
     private readonly IHolidayRepository _holidayRepository;
-    private readonly IHolidayPeriodRepository _holidayPeriodRepository;
     private readonly IColaboratorsIdRepository _colaboratorsIdRepository;
     private readonly IHolidayPeriodFactory _holidayPeriodFactory;
     private readonly HolidayAmpqGateway _holidayAmqpGateway;
 
 
     
-    public HolidayService(IHolidayRepository holidayRepository, IHolidayPeriodFactory holidayPeriodFactory, IHolidayPeriodRepository holidayPeriodRepository, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
+    public HolidayService(IHolidayRepository holidayRepository, IHolidayPeriodFactory holidayPeriodFactory, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
         _holidayRepository = holidayRepository;
         _holidayPeriodFactory = holidayPeriodFactory;
-        _holidayPeriodRepository = holidayPeriodRepository;
         _holidayAmqpGateway=holidayAmqpGateway;
         _colaboratorsIdRepository = colaboratorsIdRepository;
 
@@ -55,32 +53,7 @@ public class HolidayService {
         return holidayDTO;
     }
 
-    public async Task<bool> AddHolidayPeriod(long id,HolidayPeriodDTO holidayPeriodDTO,List<string> errorMessages)
-    {
-
-
-        Holiday holiday = await _holidayRepository.GetHolidayByIdAsync(id);
-
-        if(holiday!=null)
-        {
-            HolidayDTO.UpdateToDomain(holidayPeriodDTO.StartDate,holidayPeriodDTO.EndDate,_holidayPeriodFactory,holiday);
-            
-            holiday = await _holidayRepository.AddHolidayPeriod(holiday, errorMessages);
-
-            HolidayDTO holidayDTO = HolidayDTO.ToDTO(holiday);
-
-            string holidayAmqpDTO = HolidayGatewayDTO.Serialize(holidayDTO);	
-            _holidayAmqpGateway.PublishNewHolidayPeriod(holidayAmqpDTO);
-
-            return true;
-        }
-        else
-        {
-            errorMessages.Add("Not found");
-
-            return false;
-        }
-    }
+    
 
     
 }

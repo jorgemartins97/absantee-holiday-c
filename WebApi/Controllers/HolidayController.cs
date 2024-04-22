@@ -35,24 +35,5 @@ namespace WebApi.Controllers
                 return BadRequest(errorMessages);
             }
         }
-
-        // PUT: api/Holiday
-        [HttpPut("{id}")]
-        public async Task<ActionResult<HolidayDTO>> AddNewHolidayPeriodToHoliday(long id,HolidayPeriodDTO holidayPeriodDTO)
-        {
-            List<string> errorMessages = new List<string>(); // Declare errorMessages here to capture new errors for each call
-
-            bool wasUpdated = await _holidayService.AddHolidayPeriod(id,holidayPeriodDTO, errorMessages);
-            if (!wasUpdated  && errorMessages.Any() )
-            {
-                return BadRequest(errorMessages);
-            }
-
-            return Ok();
-        }
-
-        // DELETE: api/Colaborator/5
-        // [HttpDelete("{email}")]
-        // Uncomment and implement as needed.
     }
 }
