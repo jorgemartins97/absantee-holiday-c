@@ -15,6 +15,8 @@ var config = builder.Configuration;
 var holidayQueueName = config["HolidayCommands:" + args[0]];
 var colaboratorQueueName = config["ColaboratorCommands:" + args[0]];
 var holidayPeriodQueueName = config["HolidayPeriodCommands:" + args[0]];
+var holidayPendingQueueName = config["HolidayPendingCommands:" + args[0]];
+var associationQueueName = config["AssociationPendingCommands:" + args[0]];
 var connection = config["ConnectionStrings:" + args[0]];
 
 var port = getPort(holidayQueueName);
@@ -41,6 +43,7 @@ builder.Services.AddTransient<HolidayAmpqGateway>();
 builder.Services.AddSingleton<IHolidayPeriodFactory, HolidayPeriodFactory>();
 
 builder.Services.AddSingleton<IRabbitMQConsumerController, RabbitMQConsumerController>();
+builder.Services.AddSingleton<IRabbitMQAssociationConsumerController, RabbitMQAssociationConsumerController>();
 
 builder.Services.AddTransient<IColaboratorsIdRepository, ColaboratorsIdRepository>();
 builder.Services.AddTransient<IColaboratorIdFactory, ColaboratorIdFactory>();
@@ -48,6 +51,10 @@ builder.Services.AddTransient<ColaboratorsIdMapper>();
 builder.Services.AddTransient<ColaboratorIdService>();
 builder.Services.AddTransient<IRabbitMQColabConsumerController, RabbitMQColabConsumerController>();
 
+builder.Services.AddTransient<IHolidayPendingRepository, HolidayPendingRepository>();
+builder.Services.AddTransient<HolidayPendingMapper>();
+builder.Services.AddTransient<HolidayPendingService>();
+builder.Services.AddTransient<IRabbitMQHolidayPendingConsumerController, RabbitMQHolidayPendingConsumerController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,15 +69,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 
-
+var rabbitMQHolidayPendingConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayPendingConsumerController>();
 var rabbitMQConsumerService = app.Services.GetRequiredService<IRabbitMQConsumerController>();
 var rabbitMQColabConsumerService = app.Services.GetRequiredService<IRabbitMQColabConsumerController>();
+var rabbitMQAssociationConsumerService = app.Services.GetRequiredService<IRabbitMQAssociationConsumerController>();
 
 rabbitMQColabConsumerService.ConfigQueue(colaboratorQueueName);
 rabbitMQConsumerService.ConfigQueue(holidayQueueName);
+rabbitMQHolidayPendingConsumerService.ConfigQueue(holidayPendingQueueName);
+rabbitMQAssociationConsumerService.ConfigQueue(associationQueueName);
 
 rabbitMQConsumerService.StartConsuming();
 rabbitMQColabConsumerService.StartConsuming();
+rabbitMQHolidayPendingConsumerService.StartConsuming();
+rabbitMQAssociationConsumerService.StartConsuming();
 
 app.MapControllers();
 

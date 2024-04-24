@@ -12,9 +12,12 @@ namespace WebApi.Controllers
     {   
         private readonly HolidayService _holidayService;
 
-        public HolidayController(HolidayService holidayService)
+        private readonly HolidayPendingService _holidayPendingService;
+
+        public HolidayController(HolidayService holidayService, HolidayPendingService holidayPendingService)
         {
             _holidayService = holidayService;
+            _holidayPendingService = holidayPendingService;
         }
 
         
@@ -24,7 +27,8 @@ namespace WebApi.Controllers
         {
             List<string> errorMessages = new List<string>(); // Declare errorMessages here to capture new errors for each call
 
-            HolidayDTO holidayResultDTO = await _holidayService.Add(holidayDTO, errorMessages);
+            //HolidayDTO holidayResultDTO = await _holidayService.Add(holidayDTO, errorMessages);
+            HolidayDTO holidayResultDTO = await _holidayPendingService.Add(holidayDTO, errorMessages);
             if (holidayResultDTO != null)
             {
                 // Assuming GetHolidayById action expects a route parameter named 'id'

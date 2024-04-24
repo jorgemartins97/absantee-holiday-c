@@ -24,7 +24,7 @@ namespace WebApi.Controllers
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
  
-            _channel.ExchangeDeclare(exchange: "holiday_logs", type: ExchangeType.Fanout);
+            _channel.ExchangeDeclare(exchange: "holiday_Pending_Logs", type: ExchangeType.Fanout);
  
             Console.WriteLine(" [*] Waiting for messages from holiday.");
 
@@ -51,8 +51,8 @@ namespace WebApi.Controllers
                 //_channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                 using (var scope = _scopeFactory.CreateScope()){
-                var holidayService = scope.ServiceProvider.GetRequiredService<HolidayService>();
-                await holidayService.Add(holidayAmpqDTO, _errorMessages);
+                var holidayPendingService = scope.ServiceProvider.GetRequiredService<HolidayPendingService>();
+                await holidayPendingService.Add(holidayAmpqDTO, _errorMessages);
                 };
             };
             _channel.BasicConsume(queue: _queueName,
@@ -73,7 +73,7 @@ namespace WebApi.Controllers
                                             arguments: null);
 
             _channel.QueueBind(queue: _queueName, 
-                  exchange: "holiday_logs",
+                  exchange: "holiday_Pending_Logs",
                   routingKey: string.Empty);
         }
  

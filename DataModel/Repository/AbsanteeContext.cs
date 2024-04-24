@@ -18,6 +18,8 @@ public class AbsanteeContext : DbContext
 
 	public virtual DbSet<HolidayDataModel> Holidays { get; set; } = null!;
 
+	public virtual DbSet<HolidayPendingDataModel> HolidaysPending { get; set; } = null!;
+	
 	public virtual DbSet<ColaboratorsIdDataModel> ColaboratorsId { get; set; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

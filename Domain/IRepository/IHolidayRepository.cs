@@ -8,4 +8,6 @@ public interface IHolidayRepository : IGenericRepository<Holiday>
     //Task<Holiday> AddHolidayPeriod(Holiday holiday, List<string> errorMessages);
     Task<Holiday> AddHoliday(Holiday holiday);
     Task<Holiday> GetHolidayByIdAsync(long id);
+    Task<IEnumerable<Holiday>> getHolidaysByColabIdInPeriod(long colabId, DateOnly startDate, DateOnly endDate);
+    
 }

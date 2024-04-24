@@ -10,7 +10,7 @@ using Domain.Factory;
 using DataModel.Model;
 using Gateway;
 
-public class HolidayService {
+public class HolidayPendingService {
 
     private readonly AbsanteeContext _context;
     private readonly IHolidayPendingRepository _holidayPendingRepository;
@@ -20,7 +20,7 @@ public class HolidayService {
 
 
     
-    public HolidayService(IHolidayPendingRepository holidayPendingRepository, IHolidayPeriodFactory holidayPeriodFactory, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
+    public HolidayPendingService(IHolidayPendingRepository holidayPendingRepository, IHolidayPeriodFactory holidayPeriodFactory, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
         _holidayPendingRepository = holidayPendingRepository;
         _holidayPeriodFactory = holidayPeriodFactory;
         _holidayAmqpGateway=holidayAmqpGateway;
@@ -48,7 +48,7 @@ public class HolidayService {
         HolidayDTO holidayDTO = HolidayDTO.ToDTO(holiday);
 
         string holidayAmqpDTO = HolidayGatewayDTO.Serialize(holidayDTO);	
-        _holidayAmqpGateway.Publish(holidayAmqpDTO);
+        _holidayAmqpGateway.PublishNewHolidayPending(holidayAmqpDTO);
 
         return holidayDTO;
     }

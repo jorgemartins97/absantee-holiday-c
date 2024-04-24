@@ -27,6 +27,8 @@ namespace Domain
 				});
 			services.AddScoped<HolidayService>();
 			services.AddScoped<ColaboratorIdService>();
+			services.AddScoped<HolidayPendingService>();
+			services.AddScoped<AssociationService>();
 		}
 
 		public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)

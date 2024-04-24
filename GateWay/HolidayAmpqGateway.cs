@@ -23,10 +23,10 @@ public class HolidayAmpqGateway
                               body: body);
     }
     
-    public void PublishNewHolidayPeriod(string holiday)
+    public void PublishNewHolidayPending(string holiday)
     {
         var body = Encoding.UTF8.GetBytes(holiday);
-        _channel.BasicPublish(exchange: "holiday_WithHolidayPeriod_logs",
+        _channel.BasicPublish(exchange: "holiday_Pending_Logs",
                               routingKey: string.Empty,
                               basicProperties: null,
                               body: body);
