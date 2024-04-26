@@ -6,18 +6,18 @@ using Domain.Factory;
 using System.Linq;
 using System;
 
-public class HolidayMapper
+public class HolidayPendingMapper
 {
     private IHolidayFactory _holidayFactory;
 
-    public HolidayMapper(
+    public HolidayPendingMapper(
         IHolidayFactory holidayFactory)
     {
         _holidayFactory = holidayFactory;
     }
 
 
-    public Holiday ToDomain(HolidayDataModel holidayDM)
+    public Holiday ToDomain(HolidayPendingDataModel holidayDM)
     {
         long id = holidayDM.Id;
         ColaboratorsIdDataModel colabId = holidayDM.colaboratorId;
@@ -33,11 +33,11 @@ public class HolidayMapper
         return holidayDomain;
     }
  
-    public IEnumerable<Holiday> ToDomain(IEnumerable<HolidayDataModel> holidaysDM)
+    public IEnumerable<Holiday> ToDomain(IEnumerable<HolidayPendingDataModel> holidaysDM)
     {
         List<Holiday> holidaysDomain = new List<Holiday>();
 
-        foreach(HolidayDataModel holidayDataModel in holidaysDM)
+        foreach(HolidayPendingDataModel holidayDataModel in holidaysDM)
         {
             Holiday holidayDomain = ToDomain(holidayDataModel);
 
@@ -49,9 +49,9 @@ public class HolidayMapper
 
     
 
-    public HolidayDataModel ToDataModel(Holiday holiday, ColaboratorsIdDataModel colaboratorsIdDataModel)
+    public HolidayPendingDataModel ToDataModel(Holiday holiday, ColaboratorsIdDataModel colaboratorsIdDataModel)
     {
-        var holidayDataModel = new HolidayDataModel
+        var holidayDataModel = new HolidayPendingDataModel
         {
             Id = holiday.Id,
             colaboratorId = colaboratorsIdDataModel,

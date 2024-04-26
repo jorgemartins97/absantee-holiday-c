@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-public interface IRabbitMQConsumerController
+public interface IRabbitMQHolidayPendingConsumerController
 {
     void StartConsuming();
-    void StopConsuming();
+    void ConfigQueue(string queueName);
 }
