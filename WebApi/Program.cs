@@ -17,8 +17,11 @@ var colaboratorQueueName = config["ColaboratorCommands:" + args[0]];
 var holidayPeriodQueueName = config["HolidayPeriodCommands:" + args[0]];
 var holidayPendingQueueName = config["HolidayPendingCommands:" + args[0]];
 var associationQueueName = config["AssociationPendingCommands:" + args[0]];
+<<<<<<< HEAD
 var holidayPendingResponseQueueName = config["HolidayPendingResponseCommands:" + args[0]];
 
+=======
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 var connection = config["ConnectionStrings:" + args[0]];
 
 var port = getPort(holidayQueueName);
@@ -47,8 +50,13 @@ builder.Services.AddTransient<AssociationVerificationAmqpGateway>();
 
 builder.Services.AddSingleton<IHolidayPeriodFactory, HolidayPeriodFactory>();
 
+<<<<<<< HEAD
 builder.Services.AddSingleton<IRabbitMQAssociationConsumerController, RabbitMQAssociationConsumerController>();
 builder.Services.AddTransient<AssociationService>();
+=======
+builder.Services.AddSingleton<IRabbitMQConsumerController, RabbitMQConsumerController>();
+builder.Services.AddSingleton<IRabbitMQAssociationConsumerController, RabbitMQAssociationConsumerController>();
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 
 builder.Services.AddTransient<IColaboratorsIdRepository, ColaboratorsIdRepository>();
 builder.Services.AddTransient<IColaboratorIdFactory, ColaboratorIdFactory>();
@@ -56,6 +64,7 @@ builder.Services.AddTransient<ColaboratorsIdMapper>();
 builder.Services.AddTransient<ColaboratorIdService>();
 builder.Services.AddTransient<IRabbitMQColabConsumerController, RabbitMQColabConsumerController>();
 
+<<<<<<< HEAD
 builder.Services.AddSingleton<IRabbitMQHolidayPendingConsumerController, RabbitMQHolidayPendingConsumerController>(); 
 
 builder.Services.AddSingleton<IRabbitMQHolidayPendingResponseConsumerController, RabbitMQHolidayPendingResponseConsumerController>(); 
@@ -66,6 +75,12 @@ builder.Services.AddTransient<IHolidayPendingRepository, HolidayPendingRepositor
 builder.Services.AddTransient<HolidayPendingMapper>();
 builder.Services.AddTransient<HolidayPendingService>();
 
+=======
+builder.Services.AddTransient<IHolidayPendingRepository, HolidayPendingRepository>();
+builder.Services.AddTransient<HolidayPendingMapper>();
+builder.Services.AddTransient<HolidayPendingService>();
+builder.Services.AddTransient<IRabbitMQHolidayPendingConsumerController, RabbitMQHolidayPendingConsumerController>();
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +94,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+<<<<<<< HEAD
 
 var rabbitMQHolidayPendingConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayPendingConsumerController>();
 var rabbitMQHolidayPendingResponseConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayPendingResponseConsumerController>();
@@ -103,6 +119,28 @@ app.MapControllers();
 
 app.Run($"https://localhost:{port}");
 
+=======
+
+var rabbitMQHolidayPendingConsumerService = app.Services.GetRequiredService<IRabbitMQHolidayPendingConsumerController>();
+var rabbitMQConsumerService = app.Services.GetRequiredService<IRabbitMQConsumerController>();
+var rabbitMQColabConsumerService = app.Services.GetRequiredService<IRabbitMQColabConsumerController>();
+var rabbitMQAssociationConsumerService = app.Services.GetRequiredService<IRabbitMQAssociationConsumerController>();
+
+rabbitMQColabConsumerService.ConfigQueue(colaboratorQueueName);
+rabbitMQConsumerService.ConfigQueue(holidayQueueName);
+rabbitMQHolidayPendingConsumerService.ConfigQueue(holidayPendingQueueName);
+rabbitMQAssociationConsumerService.ConfigQueue(associationQueueName);
+
+rabbitMQConsumerService.StartConsuming();
+rabbitMQColabConsumerService.StartConsuming();
+rabbitMQHolidayPendingConsumerService.StartConsuming();
+rabbitMQAssociationConsumerService.StartConsuming();
+
+app.MapControllers();
+
+app.Run($"https://localhost:{port}");
+
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 int getPort(string name)
 {
     // Implement logic to map queue name to a unique port number

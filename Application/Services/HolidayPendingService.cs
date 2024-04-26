@@ -16,6 +16,7 @@ public class HolidayPendingService {
     private readonly IHolidayPendingRepository _holidayPendingRepository;
     private readonly IColaboratorsIdRepository _colaboratorsIdRepository;
     private readonly IHolidayPeriodFactory _holidayPeriodFactory;
+<<<<<<< HEAD
     private readonly HolidayPendentAmqpGateway _holidayPendentAmqpGateway;
 
 
@@ -24,6 +25,16 @@ public class HolidayPendingService {
         _holidayPendingRepository = holidayPendingRepository;
         _holidayPeriodFactory = holidayPeriodFactory;
         _holidayPendentAmqpGateway=holidayPendentAmqpGateway;
+=======
+    private readonly HolidayAmpqGateway _holidayAmqpGateway;
+
+
+    
+    public HolidayPendingService(IHolidayPendingRepository holidayPendingRepository, IHolidayPeriodFactory holidayPeriodFactory, HolidayAmpqGateway holidayAmqpGateway,IColaboratorsIdRepository colaboratorsIdRepository) {
+        _holidayPendingRepository = holidayPendingRepository;
+        _holidayPeriodFactory = holidayPeriodFactory;
+        _holidayAmqpGateway=holidayAmqpGateway;
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
         _colaboratorsIdRepository = colaboratorsIdRepository;
 
     }    
@@ -48,7 +59,11 @@ public class HolidayPendingService {
         HolidayDTO holidayDTO = HolidayDTO.ToDTO(holiday);
 
         string holidayAmqpDTO = HolidayGatewayDTO.Serialize(holidayDTO);	
+<<<<<<< HEAD
         _holidayPendentAmqpGateway.PublishNewHolidayPending(holidayAmqpDTO);
+=======
+        _holidayAmqpGateway.PublishNewHolidayPending(holidayAmqpDTO);
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 
         return holidayDTO;
     }

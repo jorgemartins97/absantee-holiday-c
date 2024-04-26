@@ -22,7 +22,11 @@ namespace WebApi.Controllers
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
 
+<<<<<<< HEAD
             _channel.ExchangeDeclare(exchange: "associationPendent", type: ExchangeType.Fanout);
+=======
+            _channel.ExchangeDeclare(exchange: "association_logs", type: ExchangeType.Fanout);
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 
             Console.WriteLine(" [*] Waiting for messages from Associations.");
         }
@@ -37,7 +41,11 @@ namespace WebApi.Controllers
                                             arguments: null);
 
             _channel.QueueBind(queue: _queueName,
+<<<<<<< HEAD
                   exchange: "associationPendent",
+=======
+                  exchange: "association_logs",
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
                   routingKey: string.Empty);
         }
 

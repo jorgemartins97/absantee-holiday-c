@@ -22,5 +22,18 @@ public class HolidayAmpqGateway
                               basicProperties: null,
                               body: body);
     }
+<<<<<<< HEAD
+=======
+    
+    public void PublishNewHolidayPending(string holiday)
+    {
+        var body = Encoding.UTF8.GetBytes(holiday);
+        _channel.BasicPublish(exchange: "holiday_Pending_Logs",
+                              routingKey: string.Empty,
+                              basicProperties: null,
+                              body: body);
+    }
+ 
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
  
 }

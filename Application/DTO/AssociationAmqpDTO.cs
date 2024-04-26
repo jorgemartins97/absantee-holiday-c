@@ -10,19 +10,29 @@ namespace Application.DTO
         public long ProjectId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
+<<<<<<< HEAD
         public bool Fundamental { get; set; }
+=======
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
 
 
         public AssociationAmqpDTO() { }
 
+<<<<<<< HEAD
         public AssociationAmqpDTO(long id, long colabId, long projectId, DateOnly startDate, DateOnly endDate,bool fundamental)
+=======
+        public AssociationAmqpDTO(long id, long colabId, long projectId, DateOnly startDate, DateOnly endDate)
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
         {
             Id = id;
             ColaboratorId = colabId;
             ProjectId = projectId;
             StartDate = startDate;
             EndDate = endDate;
+<<<<<<< HEAD
             Fundamental = fundamental;
+=======
+>>>>>>> 864ec9f506683fe48251ac746366aeeaab6e5f33
         }
 
         static public string Serialize(AssociationAmqpDTO associationDTO)
